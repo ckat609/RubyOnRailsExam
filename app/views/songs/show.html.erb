@@ -1,0 +1,41 @@
+<div class="container">
+    <div class="jumbotron">
+        <h1><%= @song.artist %> - <%= @song.title %></h1>
+    </div>
+
+    <% if flash[:errors] %>
+        <ul>
+        <% flash[:errors].each do |e| %>
+            <li class="alert alert-danger"><%= e %></li>
+        <% end %>
+        </ul>
+    <% end %>
+    <% if flash[:notice] %>
+        <ul>
+        <% flash[:notice].each do |n| %>
+            <li class="alert alert-success"><%= n %></li>
+        <% end %>
+        </ul>
+    <% end %>
+
+    <div class="row">
+        <div class="col">
+            <table class="table table-striped">
+                <thead class="thead-dark">
+                    <tr>
+                        <th>User</th>
+                        <th>No. Of Times Song Has Been Added To Each User's Playlist</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% @song.users.group(:id).each do |user| %>
+                            <tr>
+                                <td><a href="/playlists/<%= user.id %>"><%= user.fname %> <%= user.lname %></a></td>
+                                <td><%= user.get_total_added(@song) %></td>
+                            </tr>
+                    <% end %>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

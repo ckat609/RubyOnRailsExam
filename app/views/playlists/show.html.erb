@@ -1,0 +1,57 @@
+<div class="container">
+    <div class="jumbotron">
+        <h1><%= @user.fname %> <%= @user.lname %>'s playlist</h1>
+    </div>
+
+    <% if flash[:errors] %>
+        <ul>
+        <% flash[:errors].each do |e| %>
+            <li class="alert alert-danger"><%= e %></li>
+        <% end %>
+        </ul>
+    <% end %>
+    <% if flash[:notice] %>
+        <ul>
+        <% flash[:notice].each do |n| %>
+            <li class="alert alert-success"><%= n %></li>
+        <% end %>
+        </ul>
+    <% end %>
+
+    <div class="row">
+        <div class="col">
+            <table class="table table-striped">
+                <thead class="thead-dark">
+                    <tr>
+                        <th>Artist</th>
+                        <th>Title</th>
+                        <th>No. of Times Song Has Been Added To This Playlist</th>
+                        <% if @user.id == current_user.id %><th>Action</th><%end%>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% @user.songs.group(:title, :artist).each do |song| %>
+                            <tr>
+                                <td><%= song.artist %></td>
+                                <td><a href="/songs/<%= song.id %>"><%= song.title %></a></td>
+                                <td><%= @user.get_total_added(song) %></td>
+                                <% if @user.id == current_user.id %>
+                                    <td>
+                                        <form action="/playlists/<%= song.id %>" method="POST">
+                                            <input type="hidden" name="_method" value="DELETE">
+                                            <input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>">
+                                            <div class="form-group">
+                                                <input class="btn btn-danger" type="submit" value="Remove one">
+                                            </div>
+                                        </form>
+                                    </td>
+                                <% end %>
+                            </tr>
+                    <% end %>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+
+</div>
