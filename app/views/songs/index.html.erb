@@ -1,0 +1,81 @@
+<div class="container">
+    <div class="jumbotron">
+        <h1>Welcome, <%= current_user.fname %> <%= current_user.lname %>!</h1>
+        <hr>
+        <% if flash[:errors] %>
+            <ul>
+            <% flash[:errors].each do |e| %>
+                <li class="alert alert-danger"><%= e %></li>
+            <% end %>
+            </ul>
+        <% end %>
+        <% if flash[:notice] %>
+            <ul>
+            <% flash[:notice].each do |n| %>
+                <li class="alert alert-success"><%= n %></li>
+            <% end %>
+            </ul>
+        <% end %>
+        <div class="row">
+            <div class="col col-sm-4">
+                <h3>Add a song</h3>
+                <form action="/songs/create" method="POST">
+                    <input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>">
+                    <div class="form-group">
+                        <label for="song[artist]">Artist</label>
+                        <input class="form-control" type="text" name="song[artist]" id="song[artist]">
+                    </div>
+                    <div class="form-group">
+                        <label for="song[title]">Title</label>
+                        <input class="form-control" type="text" name="song[title]" id="song[title]">
+                    </div>
+                    <div class="form-group">
+                        <input class="btn btn-primary" type="submit" value="Add">
+                    </div>
+                </form>
+            </div>
+            <div class="col col-sm-8">
+            </div>
+        </div>
+    </div>
+
+
+    
+
+
+
+    <h3>All the songs in our hub:</h3>
+    <div class="row">
+        <div class="col">
+            <table class="table table-striped">
+                <thead class="thead-dark">
+                    <tr>
+                        <th>Artist</th>
+                        <th>Title</th>
+                        <th>No. of Times Song Has Been Added</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% @songs.each do |song| %>
+                            <tr>
+                                <td><%= song.artist %></td>
+                                <td><a href="/songs/<%= song.id %>"><%= song.title %></a></td>
+                                <td><%= song.get_total_added %></td>
+                                <td>
+                                    <form action="/playlists/create/<%= song.id %>" method="POST">
+                                        <input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>">
+                                        <div class="form-group">
+                                            <input class="btn btn-primary" type="submit" value="Add">
+                                        </div>
+                                    </form>
+                                </td>
+                            </tr>
+                    <% end %>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    
+
+</div>
