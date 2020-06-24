@@ -30,7 +30,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <% @user.songs.group(:title, :artist).each do |song| %>
+                    <% @user.songs.group(:id).each do |song| %>
                             <tr>
                                 <td><%= song.artist %></td>
                                 <td><a href="/songs/<%= song.id %>"><%= song.title %></a></td>
